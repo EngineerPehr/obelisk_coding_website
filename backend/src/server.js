@@ -9,8 +9,9 @@ const listener = () => {
 
 knex.migrate
     .latest()
-    .then(() => {
-    app.listen(PORT, listener)
+    .then((migrations) => {
+        console.log('migrations: ', migrations)
+        app.listen(PORT, listener)
 })
     .catch((error) => {
         console.error(error)
