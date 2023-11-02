@@ -1,5 +1,6 @@
 const service = require('./messages.service')
 const asyncErrorHandler = require('../errors/asyncErrorHandler')
+const { dataHas } = require('../utils/validationFunctions')
 
 async function messageExists (req, res, next) {
     const messageId = Number(req.params.messageId)
@@ -26,18 +27,6 @@ function read (_req, res) {
     res.json({ data })
 }
 
-async function update (req, res) {
-    const { message } = res.locals
-    const { data } = req.body
-    const updatedMessage = {
-        ...message,
-        ...data,
-        message_id: message.message_id
-    }
-    const response = await service.update(updatedMessage)
-    if (response) res.status(200).json({ data: response[0] })
-}
-
 async function remove (_req, res) {
     const messageId = res.locals.message.message_id
     const response = await service.remove(messageId)
@@ -51,13 +40,14 @@ async function list (_req, res) {
 
 module.exports = {
     create: [
+        dataHas('sender_name'),
+        dataHas('sender_email'),
+        dataHas('message_subject'),
+        dataHas('message_body'),
         asyncErrorHandler(create)
     ],
     read: [
         asyncErrorHandler(messageExists), read
-    ],
-    update: [
-        asyncErrorHandler(messageExists), update
     ],
     delete: [
         asyncErrorHandler(messageExists), remove

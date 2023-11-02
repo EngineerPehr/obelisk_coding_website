@@ -5,7 +5,6 @@ const methodNotAllowed = require('../errors/methodNotAllowed')
 router
     .route('/:messageId')
     .get(controller.read)
-    .put(controller.update)
     .delete(controller.delete)
     .all(methodNotAllowed)
 
