@@ -3,7 +3,7 @@ import Content from './components/Content'
 
 function App() {
     return (
-        <div className="flex">
+        <div>
             <Sidebar />
             <Content />
         </div>
